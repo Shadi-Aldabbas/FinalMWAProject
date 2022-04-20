@@ -1,0 +1,14 @@
+<H1>{{actor.name}}
+  <button routerLink="/actor/{{actor._id}}/edit">Edit</button>
+</H1>
+<br />
+Started Acting in: {{actor.year}}<br />
+<p>Movies:</p>
+<ul>
+  <li *ngFor="let movie of actor.movies">
+    <a routerLink="/actor/{{actor._id}}/movies/{{movie._id}}">
+      {{movie.name}}
+    </a>
+  </li>
+</ul>
+<button (click)="delete(actor._id)">delete</button> 
