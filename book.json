@@ -1,0 +1,18 @@
+{
+  "name": "Jim Carrey",
+  "movies": [
+    {
+      "name": "Dumb & Dumber.",
+      "year": 2003
+    },
+    {
+      "name": "Yes Man.",
+      "year": 2007
+    },
+    {
+      "name": "The Mask",
+      "year": 1994
+    }
+  ],
+  "year": 1981
+}

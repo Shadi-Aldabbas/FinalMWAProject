@@ -1,0 +1,13 @@
+<form #movieForm="ngForm" (ngSubmit)="editMovie(movieForm)">
+    <div>
+        <label>
+            name: <input name="name" placeholder="name" [(ngModel)]="movie.name" />
+        </label>
+        <br />
+        <label>
+            start acting in (year): <input name="year" placeholder="year" [(ngModel)]="movie.year"/>
+        </label>
+        <br />
+        <button type="submit">edit</button>
+    </div>
+</form>

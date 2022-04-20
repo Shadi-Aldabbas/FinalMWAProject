@@ -1,0 +1,24 @@
+<form #actorForm="ngForm" (ngSubmit)="editActor(actorForm)">
+  <div>
+    <label>
+      name: <input name="name" placeholder="name" [(ngModel)]="actor.name" />
+    </label>
+    <br />
+    <label>
+      start acting in (year): <input name="year" placeholder="year" [(ngModel)]="actor.year" />
+    </label>
+    <br />
+    <ul>
+      Movies:
+      <button type="button" routerLink="/actor/{{actor._id}}/addMovie">Add Movie</button>
+      <li *ngFor="let movie of actor.movies">
+        <a routerLink="/actor/{{actor._id}}/movies/{{movie._id}}">
+          {{movie.name}}
+        </a>
+        <button type="button" routerLink="/actor/{{actor._id}}/movies/{{movie._id}}/edit">edit</button>
+      </li>
+    </ul>
+
+    <button type="submit">edit</button>
+  </div>
+</form>
