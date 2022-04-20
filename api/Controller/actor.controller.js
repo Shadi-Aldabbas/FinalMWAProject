@@ -13,12 +13,6 @@ const QUERYSTRING_SHOULD_BE_NUMBER_MSG = process.env.QUERYSTRING_SHOULD_BE_NUMBE
 const CANNOT_EXCEED_COUNT_MSG = process.env.CANNOT_EXCEED_COUNT_MSG;
 
 
-// .then(()=>{
-
-// })
-// .catch(()=>{
-
-// })
 
 const getAllActors = (req, res) => {
   let offset = parseInt(process.env.DEFAULT_FIND_OFFSET, 10);
@@ -39,30 +33,29 @@ const getAllActors = (req, res) => {
     res.status(BAD_REQUEST_STATUS_CODE).json({ message: CANNOT_EXCEED_COUNT_MSG, maxCount });
     return;
   }
-
   Actor.find().skip(offset).limit(count).exec()
-  .then((actors)=>{
-    res.status(SUCCESS_STATUS_CODE).json(actors);
-  })
-  .catch((err)=>{
-    res.status(SERVER_ERROR_STATUS_CODE).json(err);
-  })
+    .then((actors) => {
+      res.status(SUCCESS_STATUS_CODE).json(actors);
+    })
+    .catch((err) => {
+      res.status(SERVER_ERROR_STATUS_CODE).json(err);
+    })
 };
 
 const getActor = (req, res) => {
   const actorId = req.params.actorId;
   Actor.findById(actorId).exec()
-  .then((actor)=>{
-    if(actor){
-      res.status(SUCCESS_STATUS_CODE).json(actor);
-    }
-    else {
-      res.status(NOT_FOUND_STATUS_CODE).json(NOT_FOUND_MSG);
-    }
-  })
-  .catch((err)=>{
-    res.status(SERVER_ERROR_STATUS_CODE).json(err);
-  })
+    .then((actor) => {
+      if (actor) {
+        res.status(SUCCESS_STATUS_CODE).json(actor);
+      }
+      else {
+        res.status(NOT_FOUND_STATUS_CODE).json(NOT_FOUND_MSG);
+      }
+    })
+    .catch((err) => {
+      res.status(SERVER_ERROR_STATUS_CODE).json(err);
+    })
 };
 
 const addActor = (req, res) => {
@@ -71,12 +64,12 @@ const addActor = (req, res) => {
     movies: req.body.movies
   };
   Actor.create(newActor)
-  .then((actor)=>{
-    res.status(CREATED_STATUS_CODE).json(actor);
-  })
-  .catch((err)=>{
-    res.status(SERVER_ERROR_STATUS_CODE).json(err);
-  })
+    .then((actor) => {
+      res.status(CREATED_STATUS_CODE).json(actor);
+    })
+    .catch((err) => {
+      res.status(SERVER_ERROR_STATUS_CODE).json(err);
+    })
 }
 
 
@@ -86,36 +79,29 @@ const fullUpdateActor = (req, res) => {
     actor.year = req.body.year;
     actor.movies = req.body.movies;
     actor.save()
-    .then((updatedActor)=>{
-      res.status(NO_CONTENT_STATUS_CODE).json(updatedActor);
-    })
-    .catch((err)=>{
-      res.status(SERVER_ERROR_STATUS_CODE).json(err);
-    })
+      .then((updatedActor) => {
+        res.status(NO_CONTENT_STATUS_CODE).json(updatedActor);
+      })
+      .catch((err) => {
+        res.status(SERVER_ERROR_STATUS_CODE).json(err);
+      })
   }
   _updateOne(req, res, actorUpdate);
 }
 
-const _updateOne = function (req, res, updateActorCallback) {
-  console.log("Update One actor Controller");
+const _updateOne =  (req, res, updateActorCallback) => {
   const actorId = req.params.actorId;
-  Actor.findById(actorId).exec(function (err, actor) {
-    const response = { status: 204, message: actor };
-    if (err) {
-      console.log("Error finding actor");
-      response.status = 500;
-      response.message = err;
-    } else if (!actor) {
-      console.log("actor id not found");
-      response.status = 404;
-      response.message = { "message": "actor ID not found" };
-    }
-    if (response.status !== 204) {
-      res.status(response.status).json(response.message);
+  Actor.findById(actorId).exec()
+  .then((actor) => {
+    if (actor) {
+      updateActorCallback(req, res, actor);
     } else {
-      updateActorCallback(req, res, actor, response);
+      res.status(NOT_FOUND_STATUS_CODE).json(NOT_FOUND_MSG);
     }
-  });
+  })
+  .catch((err) => {
+    res.status(SERVER_ERROR_STATUS_CODE).json(err);
+  });;
 }
 
 // const partialUpdateActor = function (req, res) {
@@ -141,21 +127,17 @@ const _updateOne = function (req, res, updateActorCallback) {
 
 const deleteActor = (req, res) => {
   const actorId = req.params.actorId;
-  Actor.findByIdAndDelete(actorId).exec((err, deletedActor) => {
-    const response = { status: 204 , message: deletedActor };
-    if (err) {
-      console.log("Error finding Actor");
-      response.status = 500;
-      response.message = err;
-    } else if (!deletedActor) {
-      console.log("Actor id not found");
-      response.status = 404;
-      response.message = {
-        "message": "Actor ID not found"
-      };
-    }
-    res.status(response.status).json(response.message);
-  });
+  Actor.findByIdAndDelete(actorId).exec()
+    .then((deletedActor) => {
+      if (deletedActor) {
+        res.status(NO_CONTENT_STATUS_CODE).json(deletedActor);
+      } else {
+        res.status(NOT_FOUND_STATUS_CODE).json(NOT_FOUND_MSG);
+      }
+    })
+    .catch((err) => {
+      res.status(SERVER_ERROR_STATUS_CODE).json(err);
+    });
 }
 module.exports = {
   getAllActors,

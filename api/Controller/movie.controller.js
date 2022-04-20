@@ -1,6 +1,19 @@
 const mongoose = require("mongoose");
 const Actor = mongoose.model(process.env.ACTOR_MODEL);
 
+
+const SUCCESS_STATUS_CODE = process.env.SUCCESS_STATUS_CODE;
+const CREATED_STATUS_CODE = process.env.CREATED_STATUS_CODE;
+const NO_CONTENT_STATUS_CODE = process.env.NO_CONTENT_STATUS_CODE;
+const BAD_REQUEST_STATUS_CODE = process.env.BAD_REQUEST_STATUS_CODE;
+const NOT_FOUND_STATUS_CODE = process.env.NOT_FOUND_STATUS_CODE;
+const SERVER_ERROR_STATUS_CODE = process.env.SERVER_ERROR_STATUS_CODE;
+
+const NOT_FOUND_MSG = process.env.NOT_FOUND_MSG;
+const QUERYSTRING_SHOULD_BE_NUMBER_MSG = process.env.QUERYSTRING_SHOULD_BE_NUMBER_MSG;
+const CANNOT_EXCEED_COUNT_MSG = process.env.CANNOT_EXCEED_COUNT_MSG;
+
+
 const getAllMovies = (req, res) => {
   const actorId = req.params.actorId;
   let offset = parseInt(process.env.DEFAULT_FIND_OFFSET, 10);
@@ -14,50 +27,44 @@ const getAllMovies = (req, res) => {
     offset = parseInt(req.query.count, 10);
   }
   if (isNaN(offset) || isNaN(count)) {
-    res.status(400).json({ "message": "QueryString Offset and Count should be numbers" });
+    res.status(BAD_REQUEST_STATUS_CODE).json({ message: QUERYSTRING_SHOULD_BE_NUMBER_MSG });
     return;
   }
   if (count > maxCount) {
-    res.status(400).json({ "message": "Cannot exceed count of " + maxCount });
+    res.status(BAD_REQUEST_STATUS_CODE).json({ message: CANNOT_EXCEED_COUNT_MSG,  maxCount });
     return;
   }
   Actor.findById(actorId).select("movies").skip(offset)
-    .limit(count).exec((err, actor) => {
-      const response = {
-        status: 200,
-        message: actor.movies
-      };
-      if (err) {
-        response.status = 500;
-        response.message = err;
+    .limit(count).exec()
+    .then((actor) => {
+      if (actor) {
+        res.status(SUCCESS_STATUS_CODE).json(actor.movies);
       }
-      else if (!actor.movies) {
-        response.status = 404;
-        response.message = { "message": `actor with ID:${actorId} has no movies` };
+      else {
+        res.status(NOT_FOUND_STATUS_CODE).json(NOT_FOUND_MSG);
       }
-      res.status(response.status).json(response.message);
-    });
+    })
+    .catch((err) => {
+      res.status(SERVER_ERROR_STATUS_CODE).json(err);
+    })
 };
 
 const getMovie = (req, res) => {
   const actorId = req.params.actorId;
   const movieId = req.params.movieId;
-  console.log("movieId", movieId);
-  Actor.findById(actorId).select("movies").exec(function (err, actor) {
-    const response = {
-      status: 200,
-      message: actor.movies.id(movieId)
-    };
-    if (err) {
-      response.status = 500;
-      response.message = err;
-    }
-    else if (!actor.movies.id(movieId)) {
-      response.status = 404;
-      response.message = { "message": `movies ID:${movieId} not found` };
-    }
-    res.status(response.status).json(response.message);
-  });
+
+  Actor.findById(actorId).select("movies").exec()
+    .then((actor) => {
+      if (actor.movies.id(movieId)) {
+        res.status(SUCCESS_STATUS_CODE).json(actor.movies.id(movieId));
+      }
+      else {
+        res.status(NOT_FOUND_STATUS_CODE).json(NOT_FOUND_MSG);
+      }
+    })
+    .catch((err) => {
+      res.status(SERVER_ERROR_STATUS_CODE).json(err);
+    })
 };
 
 const _addMovie = (req, res, actor) => {
@@ -68,14 +75,13 @@ const _addMovie = (req, res, actor) => {
       "year": req.body.year
     }
   ];
-  actor.save(function (err, updatedActor) {
-    const response = { status: 201, message: updatedActor.movies };
-    if (err) {
-      response.status = 500;
-      response.message = err;
-    }
-    res.status(response.status).json(response.message);
-  });
+  actor.save()
+  .then((updatedActor)=>{
+    res.status(CREATED_STATUS_CODE).json(updatedActor.movies);
+  })
+  .catch((err)=>{
+    res.status(SERVER_ERROR_STATUS_CODE).json(err);
+  })
 }
 
 const addMovie = (req, res) => {
@@ -101,98 +107,68 @@ const addMovie = (req, res) => {
 
 const _updateMovie = (req, res, movieUpdateCallback) => {
   const actorId = req.params.actorId;
-  const movieId = req.params.movieId;
-  Actor.findById(actorId).select("movies").exec((err, actor) => {
-    const response = { status: 204, message: actor };
-    if (err) {
-      console.log("Error Finding actor");
-      response.status = 500;
-      response.message = err;
-    } else if (!actor) {
-      console.log("actor with given ID not found");
-      response.status = 404;
-      response.message = { message: "actor ID not found" };
+
+  Actor.findById(actorId).select("movies").exec()
+  .then((actor) => {
+    if(actor){
+      movieUpdateCallback(req,res,actor);
+    }else{
+      res.status(NOT_FOUND_STATUS_CODE).json(NOT_FOUND_MSG);
     }
-    if (response.status !== 204) {
-      res.status(response.status).json(response.message);
-    }
-    movieUpdateCallback(req, res, actor);
+  })
+  .catch((err) => {
+    res.status(SERVER_ERROR_STATUS_CODE).send(err.message);
   });
+
 }
 
 const _fullMovieUpdate = (req, res, actor) => {
-  console.log("_fullMovieUpdate");
-  console.log(req.params.movieId);
-  actor.movies.id(req.params.movieId).name = req.body.name;
-  actor.movies.id(req.params.movieId).year = req.body.year;
+  const movieId = req.params.movieId;
 
-  actor.save((err, updatedActor) => {
-    const response = {
-      status: 204,
-      message: updatedActor.movies
-    };
-    if (err) {
-      response.status = 500;
-      response.message = err;
-    }
-    res.status(response.status).json(response.message);
-  });
+  actor.movies.id(movieId).name = req.body.name;
+  actor.movies.id(movieId).year = req.body.year;
+  actor.save()
+    .then((updatedActor) => {
+      res.status(NO_CONTENT_STATUS_CODE).json(updatedActor);
+    })
+    .catch((err) => {
+      res.status(SERVER_ERROR_STATUS_CODE).send(err.message);
+    });
 }
+
 const fullUpdateOne = (req, res) => {
   _updateMovie(req, res, _fullMovieUpdate);
 }
 
 
-const OLDdeleteMovie = (req, res, actor) => {
+const deleteMovie = (req, res) => {
   const actorId = req.params.actorId;
   const movieId = req.params.movieId;
-  console.log(actor);
-  actor.save((err, updatedGame) => {
-    const response = {
-      status: 204,
-      message: []
-    };
-    if (err) {
-      response.status = 500;
-      response.message = err;
-    } else {
-      response.status = 201;
-      response.message = updatedGame.publisher;
-    }
-    res.status(response.status).json(response.message);
-  });
-}
-const deleteMovie = (req, res) => {
-  Actor.findById(req.params.actorId, (err, actor) => {
-    if (!err) {
-      if (!actor) {
-        res.status(404).send('Movie was not found');
-      }
-      else {
-        actor.movies.id(req.params.movieId).remove((removeerr, removresult) => {
+
+  Actor.findById(actorId)
+    .then((actor) => {
+      if (actor) {
+
+        actor.movies.id(movieId).remove((removeerr) => {
           if (removeerr) {
-            res.status(400).send(removeerr.message);
+            res.status(SERVER_ERROR_STATUS_CODE).send(removeerr.message);
           }
         });
-        actor.save((saveerr, saveresult) => {
-          const response = {
-            status: 204,
-            message: []
-          };
-          if (saveerr) {
-            response.status = 500;
-            response.message = saveerr;
-          } else {
-            response.status = 204;
-            response.message = saveresult;
-          }
-          res.status(response.status).json(response.message);
-        });
+        actor.save()
+          .then((saveResult) => {
+            res.status(NO_CONTENT_STATUS_CODE).json(saveResult);
+          })
+          .catch((saveError) => {
+            res.status(SERVER_ERROR_STATUS_CODE).send(saveError.message);
+          });
+
+      } else if (!actor) {
+        res.status(NOT_FOUND_STATUS_CODE).send(NOT_FOUND_MSG);
       }
-    } else {
-      res.status(400).send(err.message);
-    }
-  });
+    })
+    .catch((err) => {
+      res.status(SERVER_ERROR_STATUS_CODE).send(err.message);
+    })
 }
 
 module.exports = {
