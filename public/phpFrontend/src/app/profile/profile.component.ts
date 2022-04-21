@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-profile',
@@ -7,7 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor() { }
+
+  get isLoggedIn() { return this._authService.isLoggedIn }
+
+  get userData() {return this._authService.userData }
+  
+  
+
+  constructor(private _authService: AuthenticationService) { }
 
   ngOnInit(): void {
   }

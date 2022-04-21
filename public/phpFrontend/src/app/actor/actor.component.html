@@ -1,5 +1,5 @@
 <H1>{{actor.name}}
-  <button routerLink="/actor/{{actor._id}}/edit">Edit</button>
+  <button *ngIf="isLoggedIn" routerLink="/actor/{{actor._id}}/edit">Edit</button>
 </H1>
 <br />
 Started Acting in: {{actor.year}}<br />
@@ -7,8 +7,8 @@ Started Acting in: {{actor.year}}<br />
 <ul>
   <li *ngFor="let movie of actor.movies">
     <a routerLink="/actor/{{actor._id}}/movies/{{movie._id}}">
-      {{movie.name}}
+      {{movie.name | uppercase}}
     </a>
   </li>
 </ul>
-<button (click)="delete(actor._id)">delete</button> 
+<button *ngIf="isLoggedIn" (click)="delete(actor._id)">delete</button> 

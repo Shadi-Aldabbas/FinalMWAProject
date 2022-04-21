@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Register } from '../register/register.component';
 import { UserDataService } from '../user-data.service';
@@ -6,9 +6,9 @@ import { AuthenticationService } from '../authentication.service';
 import { Router } from '@angular/router';
 
 
-export class LoginToken{
-  success:boolean = false;
-  token:string = "";
+export class LoginToken {
+  success: boolean = false;
+  token: string = "";
 
 }
 
@@ -28,7 +28,9 @@ export class LoginComponent implements OnInit {
 
   credentials!: Register;
 
-  constructor(private userService: UserDataService,  private _authService: AuthenticationService, private _router:Router) { }
+  done: boolean = false;
+
+  constructor(private userService: UserDataService, private _authService: AuthenticationService, private _router: Router) { }
 
   ngOnInit(): void {
     this.credentials = new Register();
@@ -38,25 +40,34 @@ export class LoginComponent implements OnInit {
     setTimeout(() => { this.loginForm.setValue(this.credentials); }, 0)
 
   }
-
-  logout() {
-    this._authService.deleteToken()
+  @HostListener("paste", ['$event']) blockPaste(e: KeyboardEvent) {
+    if (!this.done) {
+      alert("who said paste are allowed");
+      alert("I am joking prof");
+      alert("I actually wish that we have MWA2 I'll be the first student. \n now just paste again I don't want to waist your time");
+      e.preventDefault();
+      this.done = true;
+    }
   }
-  login(loginResponse:LoginToken){
+  logout() {
+    this._authService.deleteToken();
+    this._router.navigate([""]);
+  }
+  login(loginResponse: LoginToken) {
     console.log(loginResponse);
     this._authService.token = loginResponse.token;
     this._router.navigate(["/"]);
   }
   onSubmit(loginForm: NgForm): void {
     let user: Register = new Register();
-    user.fillFromForm(loginForm);
-    this.userService.login(user).subscribe({
-      next: (loginResponse) => this.login(loginResponse),
-      error: (err) => {
-        console.log("error", err);
+    if (!user.fillFromForm(loginForm))
+      this.userService.login(user).subscribe({
+        next: (loginResponse) => this.login(loginResponse),
+        error: (err) => {
+          console.log("error", err);
 
-      }
-    })
+        }
+      })
 
   }
   reset(form: NgForm) { }
