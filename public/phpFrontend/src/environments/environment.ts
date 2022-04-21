@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  REST_API_BASE:"http://localhost:3000/api/"
+  // REST_API_ACTORS_BASE_URL:"http://localhost:3000/api/",
+  REST_API_BASE_URL:"Base URL for the rest API",
+  TOKEN_STORAGE:"the name of the key in token in the browser storege"
 };
 
 /*

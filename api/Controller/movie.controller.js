@@ -148,12 +148,7 @@ const deleteMovie = (req, res) => {
   Actor.findById(actorId)
     .then((actor) => {
       if (actor) {
-
-        actor.movies.id(movieId).remove((removeerr) => {
-          if (removeerr) {
-            res.status(SERVER_ERROR_STATUS_CODE).send(removeerr.message);
-          }
-        });
+        actor.movies.id(movieId).remove();
         actor.save()
           .then((saveResult) => {
             res.status(NO_CONTENT_STATUS_CODE).json(saveResult);

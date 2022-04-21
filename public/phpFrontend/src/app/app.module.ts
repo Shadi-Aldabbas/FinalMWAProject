@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import {JwtHelperService , JWT_OPTIONS} from '@auth0/angular-jwt';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -16,6 +17,9 @@ import { EditActorComponent } from './edit-actor/edit-actor.component';
 import { EditMovieComponent } from './edit-movie/edit-movie.component';
 import { AddMovieComponent } from './add-movie/add-movie.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +33,9 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     EditActorComponent,
     EditMovieComponent,
     AddMovieComponent,
+    RegisterComponent,
+    LoginComponent,
+    ProfileComponent,
   ],
   imports: [
     HttpClientModule,
@@ -44,6 +51,14 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
       {
       path: "actor",
       component: ActorsComponent
+      },
+      {
+      path: "profile",
+      component: ProfileComponent
+      },
+      {
+      path: "register",
+      component: RegisterComponent
       },
       {
       path: "actor/add",
@@ -76,7 +91,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
       ])
       
   ],
-  providers: [],
+  providers: [{provide:JWT_OPTIONS, useValue:JWT_OPTIONS},JwtHelperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

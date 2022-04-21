@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AuthenticationService } from './authentication.service';
 import { Actor } from './Models/actor-module';
 
 @Injectable({
@@ -9,9 +10,8 @@ import { Actor } from './Models/actor-module';
 })
 export class ActorsDataService {
 
-  constructor(private http: HttpClient) { }
-  // private readonly baseUrl: string = 'http://localhost:3000/api/actors/:actorId/movies/:movieId';
-  private readonly baseUrl: string = environment.REST_API_BASE;
+  constructor(private http: HttpClient, private _authService:AuthenticationService) { }
+  private readonly baseUrl: string = environment.REST_API_BASE_URL;
 
   public getActors(): Observable<Actor[]> {
     return this.http.get<Actor[]>(this.baseUrl + 'actors');
@@ -21,13 +21,13 @@ export class ActorsDataService {
     return this.http.get<Actor>(url);
   }
   public deleteActor(id: string): Observable<any> {
-    return this.http.delete(this.baseUrl + 'actors/' + id);
+    return this.http.delete(this.baseUrl + 'actors/' + id, {headers: new HttpHeaders().set('Authorization', 'Baerar ' + this._authService.token)});
   }
 
   public createActor(actor:Actor): Observable<any> {
-    return this.http.post(`${this.baseUrl}actors`, actor);
+    return this.http.post(`${this.baseUrl}actors`, actor, {headers: new HttpHeaders().set('Authorization', 'Baerar ' + this._authService.token)});
   }
   public updateActor(actor:Actor,actorId:string): Observable<any> {
-    return this.http.put(`${this.baseUrl}actors/${actorId}`, actor);
+    return this.http.put(`${this.baseUrl}actors/${actorId}`, actor, {headers: new HttpHeaders().set('Authorization', 'Baerar ' + this._authService.token)});
   }
 }
