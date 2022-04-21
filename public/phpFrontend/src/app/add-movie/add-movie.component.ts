@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { Movie } from '../Models/actor-module';
 import { MoviesDataService } from '../movies-data.service';
 

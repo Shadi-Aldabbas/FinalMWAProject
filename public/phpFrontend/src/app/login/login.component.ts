@@ -1,9 +1,10 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { Register } from '../register/register.component';
 import { UserDataService } from '../user-data.service';
 import { AuthenticationService } from '../authentication.service';
-import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
 

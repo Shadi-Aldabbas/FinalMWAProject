@@ -1,4 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
+
 import { ActorsDataService } from '../actors-data.service';
 import { AuthenticationService } from '../authentication.service';
 import { Actor } from '../Models/actor-module';
@@ -21,8 +23,8 @@ export class HomeComponent implements OnInit {
   
    @HostListener('copy', ['$event']) blockCopy(e: KeyboardEvent) {
      if(!this.done){
-       alert("copy and paste are NOT allowed");
-       alert("Just Kidding here is the password:  56723423984734230294208438432987343872984!!!!!@#$%^&*");
+       alert(environment.COPY_MSG_ONE);
+       alert(environment.COPY_MSG_TWO);
        e.preventDefault();
       //  this.done = true;
      }

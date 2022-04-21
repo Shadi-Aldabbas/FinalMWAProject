@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { AuthenticationService } from '../authentication.service';
 
 @Component({
@@ -12,8 +13,6 @@ export class ProfileComponent implements OnInit {
   get isLoggedIn() { return this._authService.isLoggedIn }
 
   get userData() {return this._authService.userData }
-  
-  
 
   constructor(private _authService: AuthenticationService) { }
 
