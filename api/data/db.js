@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 require("./actor-model");
 require("./movie-model");
+require("./user-model");
 mongoose.connect(process.env.DB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
