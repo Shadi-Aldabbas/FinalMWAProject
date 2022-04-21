@@ -2,25 +2,26 @@ const express = require("express");
 const router = express.Router();
 const actorController = require("../Controller/actor.controller");
 const movieController = require("../Controller/movie.controller");
+const authenticationController = require("../Controller/auth.controller");
 
 
 router.route("/:actorId/movies/:movieId")
-  .get(movieController.getMovie) // tested
-  .put(movieController.fullMovieUpdate) // tested
-  .delete(movieController.deleteMovie); // tested
+  .get(movieController.getMovie)
+  .put(authenticationController.authenticate,movieController.fullMovieUpdate)
+  .delete(authenticationController.authenticate,movieController.deleteMovie);
 
 router.route("/:actorId/movies")
-  .get(movieController.getAllMovies) // tested
-  .post(movieController.addMovie) // tested
+  .get(movieController.getAllMovies)
+  .post(authenticationController.authenticate,movieController.addMovie)
   
 router.route("/:actorId")
-  .get(actorController.getActor) // tested
-  .delete(actorController.deleteActor) // tested
-  .put(actorController.fullUpdateActor) // tested
+  .get(actorController.getActor)
+  .delete(authenticationController.authenticate,actorController.deleteActor)
+  .put(authenticationController.authenticate,actorController.fullUpdateActor)
 ;
   
 router.route("")
-  .get(actorController.getAllActors) // tested
-  .post(actorController.addActor) // tested
+  .get(actorController.getAllActors)
+  .post(authenticationController.authenticate, actorController.addActor)
 
 module.exports = router;

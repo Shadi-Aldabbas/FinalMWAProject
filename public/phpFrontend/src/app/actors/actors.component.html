@@ -3,7 +3,7 @@
   <input type="text" [(ngModel)]="term" class="searchTerm" placeholder="What are you looking for?">
 </div>
 <ul>
-  <button routerLink="/actor/add">Add</button>
+  <button *ngIf="isLoggedIn" routerLink="/actor/add">Add</button>
   <li *ngFor="let actor of actors  | filter:term ">
     <a routerLink="/actor/{{actor._id}}">
       {{actor.name}}

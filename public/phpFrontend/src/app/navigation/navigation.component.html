@@ -1,4 +1,7 @@
 <nav>
     <button (click)="onHome()">Home</button>
     <button (click)="onActor()">Actors</button>
+    <button *ngIf="!isLoggedIn" (click)="onRegister()">Register</button>
+    <button *ngIf="isLoggedIn" (click)="onProfile()">Profile</button>
+    <app-login></app-login>
 </nav>

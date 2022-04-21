@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActorsDataService } from '../actors-data.service';
+import { AuthenticationService } from '../authentication.service';
 import { Actor } from '../Models/actor-module';
 
 @Component({
@@ -8,11 +9,16 @@ import { Actor } from '../Models/actor-module';
   styleUrls: ['./actors.component.css']
 })
 export class ActorsComponent implements OnInit {
+
+  get isLoggedIn() { return this._authService.isLoggedIn }
+
+
+
   searchTerm!: string;
   actors!: Actor[]
   term!: string;
 
-  constructor(private actorsService: ActorsDataService) { }
+  constructor(private actorsService: ActorsDataService, private _authService:AuthenticationService) { }
   
   ngOnInit(): void {
     this.getActors();

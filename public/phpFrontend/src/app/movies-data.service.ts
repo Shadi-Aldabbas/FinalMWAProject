@@ -1,17 +1,18 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AuthenticationService } from './authentication.service';
 import {  Movie } from './Models/actor-module';
+import { constants } from './constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MoviesDataService {
 
-  constructor(private http: HttpClient) { }
-  // private readonly baseUrl: string = 'http://localhost:3000/api/actors/:actorId/movies/:movieId';
-  private readonly baseUrl: string = environment.REST_API_BASE;
+  constructor(private http: HttpClient, private _authService: AuthenticationService) { }
+  private readonly baseUrl: string = environment.REST_API_BASE_URL;
   public getMovies(actorId:string): Observable<Movie[]> {
     return this.http.get<Movie[]>(`${this.baseUrl}actors/${actorId}/movies`);
   }
@@ -20,13 +21,13 @@ export class MoviesDataService {
     return this.http.get<Movie>(url);
   }
   public deleteMovie(actorId:string,movieId: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}actors/${actorId}/movies/${movieId}`);
+    return this.http.delete(`${this.baseUrl}actors/${actorId}/movies/${movieId}` ,  {headers: new HttpHeaders().set('Authorization', 'Baerar ' + this._authService.token)});
   }
   public createMovie(actorId:string,movie:Movie): Observable<any> {
-    return this.http.post(`${this.baseUrl}actors/${actorId}/movies`, movie);
+    return this.http.post(`${this.baseUrl}actors/${actorId}/movies`, movie,  {headers: new HttpHeaders().set('Authorization', 'Baerar ' + this._authService.token)});
   }
   public updateMovie(actorId:string,movieId:string,movie:Movie): Observable<any> {
-    return this.http.put(`${this.baseUrl}actors/${actorId}/movies/${movieId}`, movie);
+    return this.http.put(`${this.baseUrl}actors/${actorId}/movies/${movieId}`, movie, {headers: new HttpHeaders().set('Authorization', 'Baerar ' + this._authService.token)});
   }
 
 }
