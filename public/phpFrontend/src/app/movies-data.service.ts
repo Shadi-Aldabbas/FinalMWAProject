@@ -21,14 +21,14 @@ export class MoviesDataService {
     const url: string = `${this.baseUrl}${constants.ACTORS}/${actorId}/${constants.MOVIES}/${movieId}`;
     return this.http.get<Movie>(url);
   }
-  public deleteMovie(actorId:string,movieId: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}${constants.ACTORS}/${actorId}/${constants.MOVIES}/${movieId}` ,  {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
+  public deleteMovie(actorId:string,movieId: string): Observable<Movie> {
+    return this.http.delete<Movie>(`${this.baseUrl}${constants.ACTORS}/${actorId}/${constants.MOVIES}/${movieId}` ,  {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
   }
-  public createMovie(actorId:string,movie:Movie): Observable<any> {
-    return this.http.post(`${this.baseUrl}${constants.ACTORS}/${actorId}/${constants.MOVIES}`, movie,  {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
+  public createMovie(actorId:string,movie:Movie): Observable<Movie> {
+    return this.http.post<Movie>(`${this.baseUrl}${constants.ACTORS}/${actorId}/${constants.MOVIES}`, movie,  {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
   }
-  public updateMovie(actorId:string,movieId:string,movie:Movie): Observable<any> {
-    return this.http.put(`${this.baseUrl}${constants.ACTORS}/${actorId}/${constants.MOVIES}/${movieId}`, movie, {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
+  public updateMovie(actorId:string,movieId:string,movie:Movie): Observable<Movie> {
+    return this.http.put<Movie>(`${this.baseUrl}${constants.ACTORS}/${actorId}/${constants.MOVIES}/${movieId}`, movie, {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
   }
 
 }
