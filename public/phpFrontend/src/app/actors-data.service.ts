@@ -22,14 +22,14 @@ export class ActorsDataService {
     const url: string = this.baseUrl + constants.ACTORS+'/' + id;
     return this.http.get<Actor>(url);
   }
-  public deleteActor(id: string): Observable<any> {
-    return this.http.delete(this.baseUrl + constants.ACTORS+'/' + id, {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
+  public deleteActor(id: string): Observable<Actor> {
+    return this.http.delete<Actor>(this.baseUrl + constants.ACTORS+'/' + id, {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
   }
 
-  public createActor(actor:Actor): Observable<any> {
-    return this.http.post(`${this.baseUrl}${constants.ACTORS}`, actor, {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
+  public createActor(actor:Actor): Observable<Actor> {
+    return this.http.post<Actor>(`${this.baseUrl}${constants.ACTORS}`, actor, {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
   }
-  public updateActor(actor:Actor,actorId:string): Observable<any> {
-    return this.http.put(`${this.baseUrl}${constants.ACTORS}/${actorId}`, actor, {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
+  public updateActor(actor:Actor,actorId:string): Observable<Actor> {
+    return this.http.put<Actor>(`${this.baseUrl}${constants.ACTORS}/${actorId}`, actor, {headers: new HttpHeaders().set(constants.AUTHORIZATION, constants.BAERAR + this._authService.token)});
   }
 }
