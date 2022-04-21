@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../authentication.service';
 
+import { AuthenticationService } from '../authentication.service';
 import { UserDataService } from '../user-data.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
   get registrationForm() { return this.#registrationForm }
 
 
-  constructor(private userService: UserDataService, private _router: Router, private _formBuilder: FormBuilder, private _authService: AuthenticationService) {
+  constructor(private userService: UserDataService, private _formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {

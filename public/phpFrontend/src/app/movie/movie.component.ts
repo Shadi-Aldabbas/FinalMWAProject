@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { AuthenticationService } from '../authentication.service';
 import { Movie } from '../Models/actor-module';
 import { MoviesDataService } from '../movies-data.service';

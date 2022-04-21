@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { ActorsDataService } from '../actors-data.service';
 import { AuthenticationService } from '../authentication.service';
 import { Actor } from '../Models/actor-module';
-import { MoviesDataService } from '../movies-data.service';
 
 @Component({
   selector: 'app-actor',

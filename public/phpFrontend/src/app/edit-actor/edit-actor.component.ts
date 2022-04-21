@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { ActorsDataService } from '../actors-data.service';
 import { Actor, Movie } from '../Models/actor-module';
 import { MoviesDataService } from '../movies-data.service';
@@ -19,7 +20,7 @@ export class EditActorComponent implements OnInit {
   movie!:Movie;
   actorId!:string;
 
-  constructor(private route: ActivatedRoute,private moviesService: MoviesDataService,private actorService:ActorsDataService,private _router:Router) { 
+  constructor(private route: ActivatedRoute,private actorService:ActorsDataService,private _router:Router) { 
     this.actor = new Actor("","","")
   }
 
