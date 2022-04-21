@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ActorsDataService } from '../actors-data.service';
+import { AuthenticationService } from '../authentication.service';
 import { Actor } from '../Models/actor-module';
 
 @Component({
@@ -12,8 +13,9 @@ export class HomeComponent implements OnInit {
 
   done:boolean = false;
   
+  get isLoggedIn() { return this._authService.isLoggedIn }
 
-  constructor(private actorsService: ActorsDataService) {
+  constructor(private actorsService: ActorsDataService, private _authService:AuthenticationService) {
   console.log("56723423984734230294208438432987343872984!!!!!@#$%^&*");
    }
   

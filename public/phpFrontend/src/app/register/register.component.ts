@@ -13,15 +13,12 @@ import { UserDataService } from '../user-data.service';
 export class RegisterComponent implements OnInit {
 
   errorMsg: string = "";
-  hasErr: boolean = false;
   successMsg: string = "";
-  hasSuccess: boolean = false;
 
 
   #registrationForm!: FormGroup;
   get registrationForm() { return this.#registrationForm }
 
-  get isLoggedIn() { return this._authService.isLoggedIn }
 
   constructor(private userService: UserDataService, private _router: Router, private _formBuilder: FormBuilder, private _authService: AuthenticationService) {
   }
@@ -36,7 +33,6 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(registrationForm: FormGroup) {
-    if (this.isLoggedIn === false) { alert("I know its a long password") }
     let newUser: Register = new Register();
     if (newUser.fillFromForm(this.registrationForm)) {
       this.userService.registerUser(newUser).subscribe({
@@ -45,22 +41,16 @@ export class RegisterComponent implements OnInit {
         // complete: () => this._router.navigate(['actor'])
       });
     } else {
-      this.errorMsg = "repeat password field should be same as password field";
+      this.successMsg = "";
+      this.errorMsg = "passwords are not the same";
       console.log("not same passwords");
 
     }
   }
   userCreated() {
-    this.hasErr = false;
-    this.hasSuccess = true;
+    this.errorMsg = "";
     this.successMsg = "created successfully";
   }
-  failedToCreateUser() {
-    this.hasErr = true;
-    this.hasSuccess = false;
-    this.successMsg = "failed to create user";
-  }
-
 }
 
 export class Register {

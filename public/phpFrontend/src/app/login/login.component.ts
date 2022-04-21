@@ -4,6 +4,7 @@ import { Register } from '../register/register.component';
 import { UserDataService } from '../user-data.service';
 import { AuthenticationService } from '../authentication.service';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 
 export class LoginToken {
@@ -37,14 +38,14 @@ export class LoginComponent implements OnInit {
     this.credentials.username = "";
     this.credentials.password = "";
 
-    setTimeout(() => { this.loginForm.setValue(this.credentials); }, 0)
+    // setTimeout(() => { this.loginForm.setValue(this.credentials); }, 0)
 
   }
   @HostListener("paste", ['$event']) blockPaste(e: KeyboardEvent) {
     if (!this.done) {
-      alert("who said paste are allowed");
-      alert("I am joking prof");
-      alert("I actually wish that we have MWA2 I'll be the first student. \n now just paste again I don't want to waist your time");
+      alert(environment.PASTE_MSG_ONE);
+      alert(environment.PASTE_MSG_TWO);
+      alert(environment.PASTE_MSG_THREE);
       e.preventDefault();
       this.done = true;
     }
@@ -56,15 +57,15 @@ export class LoginComponent implements OnInit {
   login(loginResponse: LoginToken) {
     console.log(loginResponse);
     this._authService.token = loginResponse.token;
-    this._router.navigate(["/"]);
+    this._router.navigate(["/actor"]);
   }
   onSubmit(loginForm: NgForm): void {
     let user: Register = new Register();
     if (!user.fillFromForm(loginForm))
       this.userService.login(user).subscribe({
         next: (loginResponse) => this.login(loginResponse),
-        error: (err) => {
-          console.log("error", err);
+        error: (err) => {console.log("error", err);
+        
 
         }
       })
