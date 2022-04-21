@@ -14,11 +14,11 @@ export class UserDataService {
   constructor(private http: HttpClient) { }
 
   public registerUser(user: Register): Observable<Register> {
-    const url: string = environment.REST_API_BASE_URL+ "users";
+    const url: string = environment.REST_API_BASE_URL+ constants.USERS;
     return this.http.post<Register>(url,user);
   }
   public login(user: Register): Observable<LoginToken> {
-    const url: string = environment.REST_API_BASE_URL+ "login";
+    const url: string = environment.REST_API_BASE_URL+ constants.LOGIN;
     return this.http.post<LoginToken>(url,user);
   }
 }

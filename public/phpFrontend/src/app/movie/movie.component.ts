@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from '../authentication.service';
 import { Movie } from '../Models/actor-module';
 import { MoviesDataService } from '../movies-data.service';
 
@@ -9,10 +10,11 @@ import { MoviesDataService } from '../movies-data.service';
   styleUrls: ['./movie.component.css']
 })
 export class MovieComponent implements OnInit {
+  get isLoggedIn() { return this._authService.isLoggedIn }
 
   movie!: Movie;
   actorId!: string;
-  constructor(private route: ActivatedRoute, private moviesService: MoviesDataService, private _router: Router) {
+  constructor(private route: ActivatedRoute, private moviesService: MoviesDataService, private _router: Router,private _authService:AuthenticationService) {
     this.movie = new Movie("", "","");
   }
   ngOnInit(): void {

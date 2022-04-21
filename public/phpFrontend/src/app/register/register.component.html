@@ -2,31 +2,33 @@
 
 <!-- </div> -->
 
-<p>{{successMsg}}</p>
-<p>{{errorMsg}}</p>
+<p style="color: aqua;">{{successMsg}}</p>
 
 <form [formGroup]="registrationForm" (ngSubmit)="onSubmit(registrationForm)">
     <div>
         <label>
             name: <input formControlName="name" placeholder="name" />
         </label>
-        <div *ngIf="registrationForm.controls['name'].invalid && registrationForm.controls['name'].touched" class="alert alert-danger">
+        <div *ngIf="registrationForm.controls['name'].invalid && registrationForm.controls['name'].touched"
+            class="alert alert-danger">
             <div *ngIf="registrationForm.controls['name'].errors">
-            Name is required.
-          </div>
+                Name is required.
+            </div>
         </div>
         <br />
         <label>
-            username: <input formControlName="username" placeholder="username"/>
+            username: <input formControlName="username" placeholder="username" />
         </label>
         <br />
         <label>
-            password: <input formControlName="password" placeholder="password"/>
+            password: <input formControlName="password" placeholder="password" />
         </label>
         <br />
         <label>
-            confirm Password: <input formControlName="repeatPassword" placeholder="confirm Password"/>
+            confirm Password: <input formControlName="repeatPassword" placeholder="confirm Password" />
         </label>
+        <br />
+        <p style="color: red;">{{errorMsg}}</p>
         <br />
         <button type="submit">Register</button>
     </div>

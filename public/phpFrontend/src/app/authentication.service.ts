@@ -18,6 +18,8 @@ export class AuthenticationService {
     this.isLoggedIn = true;
   }
   get token(){return localStorage.getItem(environment.TOKEN_STORAGE) as string;}
+
+  get userData(){return  this._jwtService.decodeToken(this.token)}
   
   get name(){
     let name:string = "Unknown"

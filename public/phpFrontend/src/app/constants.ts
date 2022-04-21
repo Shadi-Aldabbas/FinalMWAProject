@@ -1,7 +1,9 @@
 export const constants = {
-    ACTOR:"actor",
-    MOVIE:"movie,",
-    USERS:"users,",
-    LOGIN:"login,",
+    ACTORS:"actors",
+    MOVIES:"movies",
+    USERS:"users",
+    LOGIN:"login",
+    BAERAR:"Baerar ",
+    AUTHORIZATION:"Authorization",
   };
   

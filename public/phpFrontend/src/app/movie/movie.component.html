@@ -2,4 +2,4 @@
 <br />
 published in: {{movie.year}}<br />
 <!-- do ti using filter -->
-<button (click)="delete(actorId,movie._id)">delete</button>
+<button *ngIf="isLoggedIn" (click)="delete(actorId,movie._id)">delete</button>

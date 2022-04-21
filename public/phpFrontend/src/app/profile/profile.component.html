@@ -1,1 +1,6 @@
-<p>profile works!</p>
+
+<div *ngIf="isLoggedIn">
+<p>name: {{userData.name}}</p>
+<p>iat: {{userData.iat}}</p>
+<p>exp: {{userData.exp}}</p>
+</div>

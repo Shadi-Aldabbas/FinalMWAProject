@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActorsDataService } from '../actors-data.service';
+import { AuthenticationService } from '../authentication.service';
 import { Actor } from '../Models/actor-module';
 
 @Component({
@@ -10,8 +11,29 @@ import { Actor } from '../Models/actor-module';
 export class HomeComponent implements OnInit {
   actors: Actor[] = [];
 
-  constructor(private actorsService: ActorsDataService) { }
+  done:boolean = false;
   
+  get isLoggedIn() { return this._authService.isLoggedIn }
+
+  constructor(private actorsService: ActorsDataService, private _authService:AuthenticationService) {
+  console.log("56723423984734230294208438432987343872984!!!!!@#$%^&*");
+   }
+  
+   @HostListener('copy', ['$event']) blockCopy(e: KeyboardEvent) {
+     if(!this.done){
+       alert("copy and paste are NOT allowed");
+       alert("Just Kidding here is the password:  56723423984734230294208438432987343872984!!!!!@#$%^&*");
+       e.preventDefault();
+      //  this.done = true;
+     }
+  }
+  @HostListener('cut', ['$event']) blockCut(e: KeyboardEvent) {
+    if(!this.done){
+      e.preventDefault();
+      // this.done = true;
+    }
+  }
+
   ngOnInit(): void {
     this.getActors();
   }
